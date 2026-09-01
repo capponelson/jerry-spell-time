@@ -1,26 +1,26 @@
 {
-  "_readme": "EDIT THIS FILE to change the game's words, then run: python build_voice.py",
+  "_readme": "EDIT THIS FILE to change the game's words, then run: python build_voice.py  and  python publish.py",
   "_fields": {
     "word": "the spelling word, lowercase",
     "sentence": "a short sentence using the word, so he hears it in context",
     "challenge": "true for harder bonus words (worth 3 stars instead of 2). Optional, defaults to false.",
     "wrong": "OPTIONAL. Three plausible misspellings for the multiple-choice stages. Leave it out and sensible ones are generated for you.",
-    "picture": "OPTIONAL. Name of a drawing to reuse. Leave it out and the word gets a letter card instead."
+    "picture": "OPTIONAL. Name of a drawing to reuse. Leave it out and the word gets a listen-only card instead."
   },
+  "_note": "Every word here is used in every one of the five stages - the list is never split up.",
 
   "words": [
-    { "word": "fit",  "sentence": "These shoes fit my feet.",         "wrong": ["fite", "fet", "fitt"],    "picture": "fit"  },
-    { "word": "him",  "sentence": "I gave the ball to him.",          "wrong": ["hem", "hin", "hime"],     "picture": "him"  },
-    { "word": "dip",  "sentence": "I dip my chip in the sauce.",      "wrong": ["bip", "dep", "dipp"],     "picture": "dip"  },
-    { "word": "pig",  "sentence": "The pig rolls in the mud.",        "wrong": ["pigg", "peg", "big"],     "picture": "pig"  },
-    { "word": "kid",  "sentence": "That kid is my best friend.",      "wrong": ["kib", "ked", "kidd"],     "picture": "kid"  },
-    { "word": "rift", "sentence": "There is a rift in the big rock.", "wrong": ["rifd", "reft", "rif"],    "picture": "rift" },
-    { "word": "skip", "sentence": "I skip down the sidewalk.",        "wrong": ["skep", "sipp", "skipp"],  "picture": "skip" },
-    { "word": "drip", "sentence": "I hear the water drip.",           "wrong": ["dirp", "drep", "dripp"],  "picture": "drip" },
-    { "word": "skin", "sentence": "An apple has red skin.",           "wrong": ["sken", "skinn", "sking"], "picture": "skin" },
-    { "word": "spin", "sentence": "Watch the top spin around.",       "wrong": ["spen", "spinn", "sbin"],  "picture": "spin" },
-
-    { "word": "spit", "sentence": "Do not spit out your food.",       "wrong": ["spet", "sbit", "spitt"],  "picture": "spit", "challenge": true },
-    { "word": "slid", "sentence": "He slid down the slide.",          "wrong": ["slud", "sild", "slidd"],  "picture": "slid", "challenge": true }
+    { "word": "not",  "sentence": "This is not my hat.",                 "wrong": ["nott", "nat", "nut"],     "picture": "not"  },
+    { "word": "sob",  "sentence": "I heard the baby sob.",               "wrong": ["sobb", "sab", "sub"],     "picture": "sob"  },
+    { "word": "dog",  "sentence": "My dog can run very fast.",           "wrong": ["dogg", "dawg", "dug"],    "picture": "dog"  },
+    { "word": "hop",  "sentence": "The frog can hop very high.",         "wrong": ["hopp", "hap", "hup"],     "picture": "hop"  },
+    { "word": "box",  "sentence": "There is a toy in the box.",          "wrong": ["boxx", "bocks", "bax"],   "picture": "box"  },
+    { "word": "plot", "sentence": "We grow beans in our garden plot.",   "wrong": ["plott", "plat", "pot"],   "picture": "plot" },
+    { "word": "cost", "sentence": "The apple did not cost much.",        "wrong": ["costt", "kost", "cust"],  "picture": "cost" },
+    { "word": "soft", "sentence": "My pillow is very soft.",             "wrong": ["sofft", "saft", "sowft"], "picture": "soft" },
+    { "word": "slob", "sentence": "Do not be a slob with your food.",    "wrong": ["slobb", "slab", "slub"],  "picture": "slob" },
+    { "word": "lost", "sentence": "I lost my other sock.",               "wrong": ["lostt", "losd", "lawst"], "picture": "lost" },
+    { "word": "stop", "sentence": "We stop at the red light.",           "wrong": ["stopp", "stap", "stob"],  "picture": "stop" },
+    { "word": "plop", "sentence": "The rock fell in with a plop.",       "wrong": ["plopp", "plap", "plob"],  "picture": "plop" }
   ]
 }
