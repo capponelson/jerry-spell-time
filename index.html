@@ -268,12 +268,25 @@
   .cloud::before, .cloud::after{ content:""; position:absolute; background:#FFFDF6; border-radius:50%; }
   .cloud::before{ width:60%; height:80%; left:-24%; top:14%; }
   .cloud::after{ width:70%; height:95%; right:-26%; top:6%; }
+  /* The words fall on a CSS animation rather than a JavaScript timer. The
+     compositor keeps this running even when the page's frame callbacks are
+     throttled - which is what left the sky completely empty before. The
+     inline transform JavaScript sets is the resting position, so even with
+     animation switched off entirely the words are on screen and tappable. */
   .faller{
-    position:absolute; font-family:var(--display); font-weight:700;
+    position:absolute; top:0; left:0;
+    font-family:var(--display); font-weight:700;
     font-size:clamp(1.4rem,6vw,2.1rem); line-height:1;
     padding:.4em .6em; background:var(--card); color:var(--ink);
     border:3px solid var(--stroke); border-radius:16px; box-shadow:0 5px 0 var(--drop);
     cursor:pointer; white-space:nowrap; will-change:transform;
+    animation-name:skyfall;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+  }
+  @keyframes skyfall{
+    from{ transform:translate(var(--fx,0px), var(--fy0,-80px)); }
+    to  { transform:translate(var(--fx,0px), var(--fy1,420px)); }
   }
   .faller.yes{ background:var(--leaf); color:#04281B; }
   .faller.no{ background:var(--wrong); color:#FFF6E8; animation:shake .4s ease; }
@@ -369,6 +382,8 @@
   }
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+    /* the falling words simply stand still and stay tappable */
+    .faller{ animation:none !important; }
   }
 
   /* ============ word picture animations ============
@@ -1555,11 +1570,11 @@ window.addEventListener("error", function(e){
   /* ==========================================================
      9. STAGE 5 - WORD SKY
      ========================================================== */
-  var skyRaf = null, fallers = [], skyDone = false, skySpeed = 1;
+  var fallers = [], skyDone = false;
 
   function startSkyQuestion(){
     cur = S.queue[S.qi];
-    S.attempts = 0; S.hint = 0; S.busy = false; skyDone = false; skySpeed = 1;
+    S.attempts = 0; S.hint = 0; S.busy = false; skyDone = false;
     $("stageName").textContent = STAGES[S.stage].name;
     renderPips();
     showPic("skyPic", cur);
@@ -1571,81 +1586,86 @@ window.addEventListener("error", function(e){
 
   function buildSky(){
     var box = $("skyBox");
-    stopSky();
-    box.querySelectorAll(".faller,.cloud").forEach(function(n){ n.remove(); });
+    var old = box.querySelectorAll(".faller,.cloud");
+    for(var k=0;k<old.length;k++) old[k].remove();
 
     for(var c=0;c<3;c++){
       var cl = document.createElement("div");
       cl.className = "cloud";
-      cl.style.width = (54 + Math.random()*46) + "px";
+      cl.style.width  = (54 + Math.random()*46) + "px";
       cl.style.height = (26 + Math.random()*16) + "px";
-      cl.style.left = (8 + Math.random()*70) + "%";
-      cl.style.top = (6 + Math.random()*38) + "%";
+      cl.style.left   = (8 + Math.random()*70) + "%";
+      cl.style.top    = (6 + Math.random()*38) + "%";
       box.appendChild(cl);
     }
 
     var words = shuffle([cur.w].concat(cur.bad.slice(0,3)));
-    var w = box.clientWidth, h = box.clientHeight;
+    var w = box.clientWidth || 320;
+    var h = box.clientHeight || 360;
+
     fallers = words.map(function(text, i){
       var d = document.createElement("div");
       d.className = "faller";
       d.textContent = text;
       d.dataset.w = text;
       box.appendChild(d);
-      var bw = d.offsetWidth || 90;
+
+      var bw = d.offsetWidth || 96;
+      var bh = d.offsetHeight || 48;
       var lane = (w - bw) * (i + 0.5) / words.length;
-      var f = {
-        el: d,
-        x: Math.max(4, Math.min(w - bw - 4, lane + (Math.random()-0.5)*24)),
-        y: -70 - Math.random()*160 - i*40,
-        vy: 0.55 + Math.random()*0.25,
-        drift: (Math.random()-0.5)*0.25,
-        bw: bw, bh: d.offsetHeight || 52, dead:false
-      };
-      d.style.transform = "translate(" + f.x + "px," + f.y + "px)";
+      var x = Math.max(4, Math.min(w - bw - 4, lane + (Math.random() - 0.5) * 16));
+      var dur = 9 + i * 1.1 + Math.random() * 1.5;
+
+      d.style.setProperty("--fx", x + "px");
+      d.style.setProperty("--fy0", -(bh + 24) + "px");
+      d.style.setProperty("--fy1", (h + 24) + "px");
+      d.style.animationDuration = dur + "s";
+      /* A negative delay starts each word part-way down its path, so the sky
+         is already full the moment the stage opens rather than empty while
+         the first word travels into view. */
+      d.style.animationDelay = -(dur * (0.10 + i * 0.72 / words.length)) + "s";
+      /* Resting position, used by any device that will not run the animation
+         at all. Whatever happens, four words are on screen and tappable. */
+      d.style.transform = "translate(" + x + "px," + (14 + i * (h * 0.17)) + "px)";
+
+      var f = { el: d, w: text, dur: dur, dead: false };
       d.addEventListener("click", function(){ onFaller(f); });
+      /* each loop of the animation means that word reached the ground */
+      d.addEventListener("animationiteration", function(){ onLanded(f); });
       return f;
     });
-    skyRaf = requestAnimationFrame(skyStep);
   }
 
-  function skyStep(){
-    var box = $("skyBox");
-    if(!box || !$("screenSky").classList.contains("on")){ skyRaf = null; return; }
-    var w = box.clientWidth, h = box.clientHeight, floor = h * 0.78;
-    for(var i=0;i<fallers.length;i++){
-      var f = fallers[i];
-      if(f.dead) continue;
-      f.y += f.vy * skySpeed;
-      f.x += f.drift;
-      if(f.x < 4){ f.x = 4; f.drift *= -1; }
-      if(f.x > w - f.bw - 4){ f.x = w - f.bw - 4; f.drift *= -1; }
-      f.el.style.transform = "translate(" + f.x + "px," + f.y + "px)";
-      if(f.y > floor - f.bh){
-        if(f.el.dataset.w === cur.w && !skyDone){
-          /* the right word touched down - bounce it back up, a bit slower */
-          sfx.thud();
-          f.y = -80; skySpeed = Math.max(0.55, skySpeed * 0.78);
-          S.hint = Math.min(3, S.hint + 1);
-          if(S.hint >= 2) dimWrongFallers(1);
-          play("sky_again", "Here it comes again, Jerry. Listen: " + cur.w + ".");
-        }else{
-          f.y = -80 - Math.random()*120;
-        }
-      }
-    }
-    skyRaf = requestAnimationFrame(skyStep);
+  /* the right word slipped past him - slow it down and take away a wrong one */
+  function onLanded(f){
+    if(skyDone || f.dead || f.w !== cur.w) return;
+    sfx.thud();
+    S.hint = Math.min(3, S.hint + 1);
+    if(S.hint >= 2) dimWrongFallers(1);
+    f.dur = Math.min(18, f.dur * 1.3);
+    f.el.style.animationDuration = f.dur + "s";
+    play("sky_again", "Here it comes again, Jerry. Listen: " + cur.w + ".");
   }
+
   function dimWrongFallers(n){
-    var live = fallers.filter(function(f){ return !f.dead && f.el.dataset.w !== cur.w; });
-    shuffle(live).slice(0,n).forEach(function(f){ f.dead = true; f.el.classList.add("burst"); });
+    var live = fallers.filter(function(f){ return !f.dead && f.w !== cur.w; });
+    shuffle(live).slice(0, n).forEach(function(f){
+      f.dead = true;
+      f.el.classList.add("burst");
+    });
   }
-  function stopSky(){ if(skyRaf){ cancelAnimationFrame(skyRaf); skyRaf = null; } }
+
+  function stopSky(){
+    for(var i=0;i<fallers.length;i++){
+      if(fallers[i] && fallers[i].el) fallers[i].el.style.animationPlayState = "paused";
+    }
+  }
 
   function onFaller(f){
     if(S.busy || skyDone || f.dead) return;
-    if(f.el.dataset.w === cur.w){
+    if(f.w === cur.w){
       skyDone = true;
+      stopSky();
       f.el.classList.add("yes");
       sfx.catchIt();
       win();
