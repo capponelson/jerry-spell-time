@@ -10,17 +10,21 @@
   "_note": "Every word here is used in every one of the five stages - the list is never split up.",
 
   "words": [
-    { "word": "not",  "sentence": "This is not my hat.",                 "wrong": ["nott", "nat", "nut"],     "picture": "not"  },
-    { "word": "sob",  "sentence": "I heard the baby sob.",               "wrong": ["sobb", "sab", "sub"],     "picture": "sob"  },
-    { "word": "dog",  "sentence": "My dog can run very fast.",           "wrong": ["dogg", "dawg", "dug"],    "picture": "dog"  },
-    { "word": "hop",  "sentence": "The frog can hop very high.",         "wrong": ["hopp", "hap", "hup"],     "picture": "hop"  },
-    { "word": "box",  "sentence": "There is a toy in the box.",          "wrong": ["boxx", "bocks", "bax"],   "picture": "box"  },
-    { "word": "plot", "sentence": "We grow beans in our garden plot.",   "wrong": ["plott", "plat", "pot"],   "picture": "plot" },
-    { "word": "cost", "sentence": "The apple did not cost much.",        "wrong": ["costt", "kost", "cust"],  "picture": "cost" },
-    { "word": "soft", "sentence": "My pillow is very soft.",             "wrong": ["sofft", "saft", "sowft"], "picture": "soft" },
-    { "word": "slob", "sentence": "Do not be a slob with your food.",    "wrong": ["slobb", "slab", "slub"],  "picture": "slob" },
-    { "word": "lost", "sentence": "I lost my other sock.",               "wrong": ["lostt", "losd", "lawst"], "picture": "lost" },
-    { "word": "stop", "sentence": "We stop at the red light.",           "wrong": ["stopp", "stap", "stob"],  "picture": "stop" },
-    { "word": "plop", "sentence": "The rock fell in with a plop.",       "wrong": ["plopp", "plap", "plob"],  "picture": "plop" }
+    { "word": "mug",  "sentence": "I drink my milk from a mug.",        "wrong": ["mugg", "mog", "muge"],   "picture": "mug"  },
+    { "word": "tub",  "sentence": "The duck floats in the tub.",        "wrong": ["tubb", "tob", "tube"],   "picture": "tub"  },
+    { "word": "cut",  "sentence": "I cut the paper with scissors.",     "wrong": ["cutt", "kut", "cot"],    "picture": "cut"  },
+    { "word": "run",  "sentence": "I can run all the way home.",        "wrong": ["runn", "ron", "rune"],   "picture": "run"  },
+    { "word": "jug",  "sentence": "The jug is full of juice.",          "wrong": ["jugg", "juge", "jog"],   "picture": "jug"  },
+    { "word": "bump", "sentence": "I felt a bump on my head.",          "wrong": ["bumpp", "bomp", "bup"],  "picture": "bump" },
+    { "word": "tusk", "sentence": "The elephant has a long tusk.",      "wrong": ["tusc", "tosk", "tuk"],   "picture": "tusk" },
+    { "word": "drum", "sentence": "I like to bang on my drum.",         "wrong": ["drumm", "drom", "dum"],  "picture": "drum" },
+    { "word": "plug", "sentence": "Put the plug in the wall.",          "wrong": ["plugg", "plog", "pluge"],"picture": "plug" },
+    { "word": "must", "sentence": "I must brush my teeth.",             "wrong": ["mustt", "musd", "most"], "picture": "must" },
+    { "word": "runt", "sentence": "The runt is the smallest pig.",      "wrong": ["runtt", "ront", "runte"],"picture": "runt" },
+    { "word": "jump", "sentence": "I can jump over the puddle.",        "wrong": ["jumpp", "jomp", "jup"],  "picture": "jump" },
+    { "word": "look", "sentence": "Look at the big red bus.",           "wrong": ["luk", "lok", "looke"],   "picture": "look" },
+    { "word": "book", "sentence": "I read a book at bedtime.",          "wrong": ["buk", "bok", "booke"],   "picture": "book" },
+    { "word": "are",  "sentence": "We are best friends.",               "wrong": ["ar", "arr", "aer"],      "picture": "are"  },
+    { "word": "was",  "sentence": "It was my birthday.",                "wrong": ["wos", "wuz", "wass"],    "picture": "was"  }
   ]
 }
